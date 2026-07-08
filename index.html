@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>스마트팜 CSV 자동 분석 대시보드</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">CSV Upload Dashboard</p>
+        <h1>스마트팜 생육 데이터 자동 분석 대시보드</h1>
+        <p class="desc">CSV 파일을 업로드하면 수치형 컬럼은 기초통계, 목록형 컬럼은 빈도수를 자동 계산하고 4개 분석 주제별 차트를 생성합니다.</p>
+      </div>
+      <div class="upload-card">
+        <label for="csvFile" class="upload-label">CSV 파일 업로드</label>
+        <input id="csvFile" type="file" accept=".csv,text/csv" />
+        <button id="loadSampleBtn" type="button">샘플 데이터 불러오기</button>
+        <p id="status" class="status">대기 중: CSV 파일을 업로드하거나 샘플 데이터를 불러오세요.</p>
+      </div>
+    </header>
+
+    <section class="panel controls">
+      <div class="control-group">
+        <label for="regionFilter">시도 필터</label>
+        <select id="regionFilter"><option value="__ALL__">전체</option></select>
+      </div>
+      <div class="control-group">
+        <label for="cropFilter">작물명 필터</label>
+        <select id="cropFilter"><option value="__ALL__">전체</option></select>
+      </div>
+      <div class="control-group grow">
+        <label for="searchInput">전체 검색</label>
+        <input id="searchInput" type="text" placeholder="예: 딸기, 2025-01, 경산시" />
+      </div>
+      <button id="resetBtn" type="button">필터 초기화</button>
+    </section>
+
+    <section class="kpis" id="kpiArea"></section>
+
+    <section class="grid two">
+      <article class="panel">
+        <div class="section-title">
+          <div>
+            <p class="topic">기초 통계</p>
+            <h2>수치형 데이터 요약</h2>
+          </div>
+          <button class="small-btn" id="downloadStatsBtn" type="button">통계 CSV 저장</button>
+        </div>
+        <div class="table-wrap"><table id="numericStatsTable"></table></div>
+      </article>
+
+      <article class="panel">
+        <div class="section-title">
+          <div>
+            <p class="topic">빈도 분석</p>
+            <h2>목록형 데이터 빈도수</h2>
+          </div>
+        </div>
+        <div id="frequencyArea" class="frequency-area"></div>
+      </article>
+    </section>
+
+    <section class="analysis-intro panel">
+      <p class="topic">분석 주제 4개</p>
+      <h2>이 데이터로 분석할 수 있는 핵심 주제</h2>
+      <div class="topic-cards">
+        <div><strong>1. 생육지수 추이</strong><span>시간 흐름에 따라 생육지수가 어떻게 변하는지 확인</span></div>
+        <div><strong>2. 작물별 성과 비교</strong><span>작물별 평균 생육지수를 비교해 우수 작물 파악</span></div>
+        <div><strong>3. 환경요인과 생육 관계</strong><span>온도·습도·CO2·일사량과 생육지수의 상관성 확인</span></div>
+        <div><strong>4. 지역·작물별 운영 현황</strong><span>시도와 작물 조합별 데이터 분포 및 평균 성과 확인</span></div>
+      </div>
+    </section>
+
+    <section class="grid two charts">
+      <article class="panel chart-card">
+        <h3>주제 1. 측정일자별 평균 생육지수 추이</h3>
+        <canvas id="trendChart"></canvas>
+      </article>
+      <article class="panel chart-card">
+        <h3>주제 2. 작물별 평균 생육지수 비교</h3>
+        <canvas id="cropChart"></canvas>
+      </article>
+      <article class="panel chart-card">
+        <h3>주제 3. 평균기온과 생육지수 관계</h3>
+        <canvas id="scatterChart"></canvas>
+      </article>
+      <article class="panel chart-card">
+        <h3>주제 4. 시도·작물별 평균 생육지수</h3>
+        <canvas id="regionCropChart"></canvas>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">
+        <div>
+          <p class="topic">원본 데이터</p>
+          <h2>필터 적용 데이터 테이블</h2>
+        </div>
+        <button class="small-btn" id="downloadFilteredBtn" type="button">필터 데이터 CSV 저장</button>
+      </div>
+      <div class="table-wrap"><table id="dataTable"></table></div>
+    </section>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
